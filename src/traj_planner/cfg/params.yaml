@@ -1,0 +1,75 @@
+waypoint_publisher:
+  ros__parameters:
+    ## Settings
+    serial_port_name_commander: "/dev/ttyACM0"
+    serial_port_name_pulser: "/dev/ttyACM1"
+    serial_port_name_embedded_vicon: "/dev/ttyACM2"
+    U_source: 4
+    # 0: linear encoder/open loop waypoints
+    # 1: viconBase (DEPRECATED)
+    # 2: IEKF
+    # 3: vicon_GT 
+    # 4: IMU Odometry
+    verbose: true
+
+    # Running on Biorobotics Digital Storm Desktop
+    directory: "/home/bioro/BoeingInkjet/catkin_ws/src/boeing_cmu_inkbotics/print_planner/print_planner/"
+
+    Experiment: "2"
+    # 0: Linear
+    # 1: pure rotation (DEPRECATED)
+    # 2: Cylinder
+    # 3: RollerCoaster
+
+    ## Calibration Parameters
+    upper_to_IMU: #old
+      euler: [104.25, 1.939, -94.24] 
+      translation: [-0.171501,0.0608141,-0.00123971]
+
+    # upper_to_IMU_deg: #raw from calibration
+    #   euler: [104.21876836, 2.11209708, -93.68497681]
+    #   translation: [-0.226001, 0.0276626, 0.0589287]
+    
+    upper_to_IMU_deg: # with translation from CAD..
+      euler: [104.21876836, 2.11209708, -93.68497681]
+      translation: [-0.171501,0.0608141,-0.00123971]
+
+    upper_to_printhead:
+      euler: [105.311369, 1.140668, -92.308657]
+      translation: [-0.17540955,0.0407064,-0.04419476]
+    
+    # vicon_base_to_UR_base:
+    #   quat: [0.007095, 0.005023, -0.999812, 0.017318]
+    #   translation: [-0.35790947, 0.10588769, -0.00464215]
+
+
+    vicon_base_to_UR_base:
+      quat: [-0.00820337,-0.00327812, 0.99994428, 0.00577833]
+      translation: [-0.55065871,0.098989 ,-0.00763119]
+
+    ## Timing Calibration
+    sequence_offset: 0
+
+    trajectory_directory: "/home/bioro/BoeingInkjet/catkin_ws/src/boeing_cmu_inkbotics/print_planner/print_planner/"
+
+    experiment_params:
+      "0":
+        UR_base_to_surface:
+          translation: [-0.569, -0.017, 0.058]
+          quat: [-0.006, -0.017, 1.000, -0.013]
+        direction_waypoints: "translation_trajectory_clean_simplified_vicon_base.csv"
+        execution_waypoints: "translation_trajectory_noisy.csv"
+
+      "2":
+        UR_base_to_surface:
+          translation: [-0.592, 0.084, 0.059]
+          quat: [0.002, -0.005, 1.000, 0.015]
+        direction_waypoints: "cylinder_clean_simplified.csv"
+        execution_waypoints: "cylinder_clean.csv"
+
+      "3":
+        UR_base_to_surface:
+          translation: [-0.509, 0.18402, 0.05346]
+          quat: [0.008, -0.013, 1.000, -0.017]
+        direction_waypoints: "mobius_clean_simplified_vicon_base.csv"
+        execution_waypoints: "mobius_noisy.csv"
