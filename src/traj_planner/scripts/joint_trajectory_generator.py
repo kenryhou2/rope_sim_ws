@@ -95,7 +95,7 @@ def main():
     TRAJ_NAME = "whip_traj.csv"
     EXECUTION_RATE_HZ = 500.0
 
-    INTERPOLATION_STEPS = 2     # <-- controls resolution
+    INTERPOLATION_STEPS = 50     # <-- controls resolution
     HOLD_STEPS = 500              # hold final config
     PLOT = True
 
@@ -103,24 +103,24 @@ def main():
     # Initial joint configuration (degrees)
     # ------------------------------------------------------------
     q0_config_deg = {
-        "shoulder_pan": 85.57,
-        "shoulder_lift": -112.46,
-        "elbow": 129.13,
-        "wrist_1": -105.89,
-        "wrist_2": -98.23,
-        "wrist_3": 59.75,
+        "shoulder_pan": -91.30,
+        "shoulder_lift": -110.38,
+        "elbow": -80.29,
+        "wrist_1": -18.57,
+        "wrist_2": 97.80,
+        "wrist_3": 173.23,
     }
 
     # ------------------------------------------------------------
     # Final joint configuration (degrees)
     # ------------------------------------------------------------
     qf_config_deg = {
-        "shoulder_pan": 85.57,
-        "shoulder_lift": -112.46,
-        "elbow": 39.13,       # 129.13 - 90
-        "wrist_1": -195.89,   # -105.89 - 90
-        "wrist_2": -98.23,
-        "wrist_3": 59.75,
+        "shoulder_pan": -91.30,
+        "shoulder_lift": -100.57,
+        "elbow": -34.61,       
+        "wrist_1": 92.55,  
+        "wrist_2": 97.80,
+        "wrist_3": 173.23,
     }
 
     q0 = build_joint_vector_deg(q0_config_deg)
