@@ -360,30 +360,53 @@ def main():
 
     traj_type = "sinusoid"   # change here
 
-    if traj_type == "sinusoid":
+    if traj_type == "translation":
 
-        origin = [-0.11137, 0.13041, 0.65003] 
+        origin = [-0.37866, -0.77, 0.65034]
 
         times, positions, velocities, accelerations, u_values = \
-            generate_sinusoid_trajectory(
-                origin,
-                axis="x",
-                amplitude=0.05,
-                frequency=1.0,
-                duration=6.0,
+            generate_vector_trapezoidal_trajectory(
+                p0=origin,
+                # pf=[0.13815, -0.40951, 0.69732],
+                pf=[0.13813, -0.40950, 0.28221], 
+                v_max=0.1,
+                a_max=1.0,
                 dt=0.002
             )
 
-        orientations = np.tile(np.array([0.133, -1.789, 5.601]), # angle axis rotation vector (rad)
+        orientations = np.tile(np.array([1.393, 2.457, -0.652]), # angle axis rotation vector (rad)
                                (len(times),1))
 
+        save_poses_to_csv(
+            os.path.join(out_dir,"translation.csv"),positions,
+            orientations,
+            u_values
+        )
+
+        visualize_translation_trajectory(positions, times, "Translation")
+    
+    elif traj_type == "sinusoid":
+        
+        origin = [-0.37866, -0.108, 0.65034]
+
+        times, positions, velocities, accelerations, u_values = \
+            generate_sinusoid_trajectory(
+                origin=origin,
+                axis="x",
+                amplitude=0.050,
+                frequency=5.0,
+                duration=5.0,
+                dt=0.002
+            )
+        orientations = np.tile(np.array([0.889, -1.985, -5.539]), # angle axis rotation vector (rad)
+                               (len(times),1))
         save_poses_to_csv(
             os.path.join(out_dir,"sinusoid.csv"),positions,
             orientations,
             u_values
         )
-
         visualize_translation_trajectory(positions, times, "Sinusoid")
+
 
 
 if __name__ == "__main__":

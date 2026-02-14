@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import time
 import numpy as np
 import rclpy
 from rclpy.node import Node
@@ -8,7 +7,6 @@ from std_msgs.msg import Float32, String
 
 
 class WaypointPublisher(Node):
-
     def __init__(self):
         super().__init__('waypoint_publisher')
 
@@ -47,6 +45,7 @@ class WaypointPublisher(Node):
         self.current_index = 0
         self.status = "Initializing"
         self.rate_hz = 500
+        self.servo_timer = None  # created on Start, cancelled on Stop/end
 
         # -------------------------------
         # Home Pose
@@ -64,7 +63,6 @@ class WaypointPublisher(Node):
     # Initial MoveL with timing
     # ---------------------------------------------------
     def initial_move_timer_callback(self):
-
         sub_count = self.move_pub.get_subscription_count()
 
         if sub_count == 0:
@@ -72,7 +70,6 @@ class WaypointPublisher(Node):
             return
 
         self.get_logger().info("Publishing initial moveL to first waypoint.")
-
         self.move_pub.publish(self.home_pose)
 
         self.get_logger().info(
@@ -90,56 +87,69 @@ class WaypointPublisher(Node):
     # Command Callback
     # ---------------------------------------------------
     def command_callback(self, msg: String):
-
         cmd = msg.data.strip()
 
         if cmd == "Start" and self.status == "Armed":
             self.get_logger().info("START received.")
             self.status = "Running"
             self.current_index = 0
-            self.run_trajectory()
+            self.start_servo_timer()
 
         elif cmd == "Stop" and self.status == "Running":
             self.get_logger().info("STOP received.")
+            self.stop_servo_timer()
             self.status = "Stopped"
 
         else:
             self.get_logger().warn(f"Unknown or invalid command: {cmd}")
 
     # ---------------------------------------------------
-    # Main Trajectory Loop
+    # Timer start/stop (identical pattern to script 2)
     # ---------------------------------------------------
-    def run_trajectory(self):
+    def start_servo_timer(self):
+        # If a prior run left a timer around, cancel it.
+        if self.servo_timer is not None:
+            self.servo_timer.cancel()
+            self.servo_timer = None
 
-        self.get_logger().info("Publishing trajectory...")
+        self.get_logger().info(f"Starting waypoint publishing at {self.rate_hz} Hz (timer-based).")
 
-        while (
-            rclpy.ok()
-            and self.current_index < self.waypoints.shape[0]
-            and self.status == "Running"
-        ):
+        self.servo_timer = self.create_timer(
+            1.0 / float(self.rate_hz),
+            self.servo_timer_callback
+        )
 
-            pose_msg, u_msg = self.waypoint_to_msg(self.current_index)
+    def stop_servo_timer(self):
+        if self.servo_timer is not None:
+            self.servo_timer.cancel()
+            self.servo_timer = None
 
-            self.servo_pub.publish(pose_msg)
-            self.u_pub.publish(u_msg)
+    # ---------------------------------------------------
+    # Servo timer callback: publish one waypoint per tick
+    # ---------------------------------------------------
+    def servo_timer_callback(self):
+        if self.status != "Running":
+            return
 
-            self.current_index += 1
-            time.sleep(1.0 / self.rate_hz)
+        # End condition
+        if self.current_index >= self.waypoints.shape[0]:
+            self.get_logger().info("Trajectory complete.")
+            self.stop_servo_timer()
+            self.status = "Armed"
+            self.get_logger().info("Execution finished. Back to ARMED.")
+            return
 
-        if self.status == "Running":
-            self.get_logger().info("Trajectory complete. Returning home...")
-            time.sleep(1.0)
-            self.move_pub.publish(self.home_pose)
+        pose_msg, u_msg = self.waypoint_to_msg(self.current_index)
 
-        self.status = "Armed"
-        self.get_logger().info("Execution finished. Back to ARMED.")
+        self.servo_pub.publish(pose_msg)
+        self.u_pub.publish(u_msg)
+
+        self.current_index += 1
 
     # ---------------------------------------------------
     # Waypoint Conversion
     # ---------------------------------------------------
-    def waypoint_to_msg(self, index):
-
+    def waypoint_to_msg(self, index: int):
         wp = self.waypoints[index]
 
         pose_msg = self.create_pose_msg(wp)
@@ -153,18 +163,17 @@ class WaypointPublisher(Node):
     # Pose Builder
     # ---------------------------------------------------
     def create_pose_msg(self, wp):
-
         pose_msg = PoseStamped()
         pose_msg.header.stamp = self.get_clock().now().to_msg()
         pose_msg.header.frame_id = 'base'
 
-        pose_msg.pose.position.x = wp[0]
-        pose_msg.pose.position.y = wp[1]
-        pose_msg.pose.position.z = wp[2]
-        pose_msg.pose.orientation.x = wp[3]
-        pose_msg.pose.orientation.y = wp[4]
-        pose_msg.pose.orientation.z = wp[5]
-        pose_msg.pose.orientation.w = wp[6]
+        pose_msg.pose.position.x = float(wp[0])
+        pose_msg.pose.position.y = float(wp[1])
+        pose_msg.pose.position.z = float(wp[2])
+        pose_msg.pose.orientation.x = float(wp[3])
+        pose_msg.pose.orientation.y = float(wp[4])
+        pose_msg.pose.orientation.z = float(wp[5])
+        pose_msg.pose.orientation.w = float(wp[6])
 
         return pose_msg
 
