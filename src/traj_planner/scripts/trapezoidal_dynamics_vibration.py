@@ -362,7 +362,7 @@ def main():
 
     if traj_type == "sinusoid":
 
-        origin = [0.11340, -0.39090, 0.49743] 
+        origin = [-0.11137, 0.13041, 0.65003] 
 
         times, positions, velocities, accelerations, u_values = \
             generate_sinusoid_trajectory(
@@ -374,12 +374,11 @@ def main():
                 dt=0.002
             )
 
-        orientations = np.tile(np.array([2.296, 2.168, 0]), # angle axis rotation vector (rad)
+        orientations = np.tile(np.array([0.133, -1.789, 5.601]), # angle axis rotation vector (rad)
                                (len(times),1))
 
         save_poses_to_csv(
-            os.path.join(out_dir,"sinusoid.csv"),
-            positions,
+            os.path.join(out_dir,"sinusoid.csv"),positions,
             orientations,
             u_values
         )

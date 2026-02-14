@@ -10,7 +10,7 @@ from std_msgs.msg import Float32, String
 class WaypointPublisher(Node):
 
     def __init__(self):
-        super().__init__('waypoint_publisher2')
+        super().__init__('waypoint_publisher')
 
         # -------------------------------
         # Load CSV

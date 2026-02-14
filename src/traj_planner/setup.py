@@ -30,6 +30,7 @@ setup(
     entry_points={
         'console_scripts': [
             'waypoint_publisher = traj_planner.waypoint_publisher:main',
+            'joint_waypoint_publisher = traj_planner.joint_waypoint_publisher:main',
         ],
     },
 )
