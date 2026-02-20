@@ -18,7 +18,7 @@ class JointCsvWaypointPublisher(Node):
         # HARD-CODED CONFIGURATION
         # ==========================================================
 
-        self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/whip_traj.csv"
+        self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/whip_traj_low.csv"
         # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/joint_positions.csv"
         self.PUBLISH_RATE_HZ = 500.0
         self.PREFIX = ""

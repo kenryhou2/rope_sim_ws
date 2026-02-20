@@ -121,9 +121,9 @@ def main():
     # Final joint configuration (degrees)
     qf_config_deg = {
         "shoulder_pan": -91.30,
-        "shoulder_lift": -110.33,
-        "elbow": -25.61,
-        "wrist_1": 100.55,
+        "shoulder_lift": -130.38,
+        "elbow": -33.61,
+        "wrist_1": 75.55,
         "wrist_2": 97.80,
         "wrist_3": 173.23,
     }
@@ -133,7 +133,7 @@ def main():
     start_offsets_s = {
         "shoulder_pan": 0.0,
         "shoulder_lift": 0.0,   #lift
-        "elbow": 0.3,           #lift
+        "elbow": 0.0,           #lift
         "wrist_1": 0.0,         #lift
         "wrist_2": 0.0,
         "wrist_3": 0.0,
