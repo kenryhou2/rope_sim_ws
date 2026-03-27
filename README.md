@@ -156,7 +156,7 @@ rope_sim_ws/
 
 ---
 
-# 🏁 Minimal Run Sequence
+# 🏁 Minimal Run Sequence for End effector space control
 
 ```bash
 colcon build
@@ -164,4 +164,14 @@ source install/setup.bash
 ros2 launch ur_rtde_ros launch_controller.launch.py
 ros2 launch traj_planner waypoint_publisher.launch.py
 ros2 topic pub /waypoint_publisher/command std_msgs/msg/String "data: 'Start'" --once
+```
+
+# 🏁 Minimal Run Sequence for joint space control
+
+```bash
+colcon build
+source install/setup.bash
+ros2 launch ur_rtde_ros launch_controller.launch.py
+ros2 launch traj_planner joint_waypoint_publisher.launch.py
+ros2 topic pub /joint_waypoint_publisher/command std_msgs/msg/String "data: 'Start'" --once
 ```

@@ -18,9 +18,16 @@ class JointCsvWaypointPublisher(Node):
         # HARD-CODED CONFIGURATION
         # ==========================================================
 
-        self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/whip_traj_low.csv"
-        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/joint_positions.csv"
-        self.PUBLISH_RATE_HZ = 500.0
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/whip_traj_high.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/success_episode_004_env0_step47011.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/20260301/success_traj_csv_high_29_medium_target/min_dis_0.04_target_0.0_2.0_1.5_success_episode_002_env4_step1596.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/bj/success_traj_csv_6_low_target/min_dis_0.045_target_0.0_1.7_0.5_success_episode_001_env6_step2230.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/bj/success_traj_csv_8_high_target/min_dis_0.046_target_0.0_2.0_2.3_success_episode_000_env7_step1470.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/bj_2/min_dis_0.049_target_0.0_2.0_2.3_success_episode_000_env6_step3794.csv"
+        self.TRAJECTORY_PATH = "//home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/hit_apple/success_traj_csv_2/min_dis_0.049_target_0.0_2.2_1.4_success_episode_007_env0_step1893.csv"
+        # self.TRAJECTORY_PATH = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/success_episode_000_env2_step5192.csv"
+        self.get_logger().info(f"\n\n\nHERE\n\n {self.TRAJECTORY_PATH}")
+        self.PUBLISH_RATE_HZ = 500
         self.PREFIX = ""
         self.POSITION_TOLERANCE = 0.01
         self.STABLE_CYCLES_REQUIRED = 15
@@ -179,9 +186,11 @@ class JointCsvWaypointPublisher(Node):
 
     def _send_movej(self, q6):
         self.pub_move.publish(self._mk_joint_state(q6))
+        self.get_logger().info(f"move j {self._mk_joint_state(q6)}")
 
     def _send_servoj(self, q6):
         self.pub_servo.publish(self._mk_joint_state(q6))
+        self.get_logger().info(f"servo j {self._mk_joint_state(q6)}")
 
     def _publish_status(self, text):
         m = String()
@@ -225,7 +234,7 @@ class JointCsvWaypointPublisher(Node):
             if not self.initialized:
                 self.get_logger().warning("Cannot start — not initialized yet.")
                 return
-
+            
             self.idx = 0
             self.running = True
             self._publish_status("Running")

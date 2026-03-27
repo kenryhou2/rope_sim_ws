@@ -1,0 +1,10 @@
+name: ppo
+lr: 0.0003
+gamma: 0.99
+eps_clip: 0.2
+k_epochs: 4
+rollout_len: 1
+entropy_coef: 0.01
+vf_coef: 0.5
+grad_clip: 0.5
+action_std: 0.5

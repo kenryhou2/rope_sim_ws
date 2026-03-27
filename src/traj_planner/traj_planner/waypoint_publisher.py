@@ -13,7 +13,7 @@ class WaypointPublisher(Node):
         # -------------------------------
         # Load CSV
         # -------------------------------
-        csv_path = "/home/hkou/work/cmu_biorobotics/rope_sim/rope_sim_ws/src/traj_planner/waypoint_data/translation.csv"
+        csv_path = "/home/hkou/work/cmu_biorobotics/DLO_sim/rope_sim_ws/src/traj_planner/waypoint_data/sinusoid.csv"
 
         try:
             self.waypoints = np.loadtxt(csv_path, delimiter=",", skiprows=1)

@@ -358,7 +358,7 @@ def main():
     out_dir = os.path.join(dir_path, "..", "waypoint_data")
     os.makedirs(out_dir, exist_ok=True)
 
-    traj_type = "translation"   # change here
+    traj_type = "sinusoid"   # change here
 
     if traj_type == "translation":
 
@@ -387,18 +387,18 @@ def main():
     
     elif traj_type == "sinusoid":
         
-        origin = [-0.37866, -0.108, 0.65034]
+        origin = [0.143, 0.412, 0.732]
 
         times, positions, velocities, accelerations, u_values = \
             generate_sinusoid_trajectory(
                 origin=origin,
                 axis="x",
-                amplitude=0.300,
-                frequency=2.0,
+                amplitude=0.05,
+                frequency=1.0,
                 duration=5.0,
                 dt=0.002
             )
-        orientations = np.tile(np.array([0.889, -1.985, -5.539]), # angle axis rotation vector (rad)
+        orientations = np.tile(np.array([3.059, 0.168, -0.112]), # angle axis rotation vector (rad)
                                (len(times),1))
         save_poses_to_csv(
             os.path.join(out_dir,"sinusoid.csv"),positions,
